@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:flutter/material.dart';
 
 class AnimationScreen extends StatefulWidget {
   const AnimationScreen({Key? key}) : super(key: key);
@@ -10,23 +10,23 @@ class AnimationScreen extends StatefulWidget {
 
 class _AnimationScreenState extends State<AnimationScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController animController;
+  late AnimationController animationController;
   late CurvedAnimation curvedAnimation;
   late Animation<double> animation;
 
   @override
   void initState() {
-    animController = AnimationController(
+    animationController = AnimationController(
       duration: const Duration(
-        seconds: 5,
+        seconds: 10,
       ),
       vsync: this,
     );
 
     curvedAnimation = CurvedAnimation(
-      parent: animController,
-      curve: Curves.bounceIn,
-      reverseCurve: Curves.easeOut,
+      parent: animationController,
+      curve: Curves.easeInCubic,
+      reverseCurve: Curves.bounceOut,
     );
 
     animation = Tween<double>(
@@ -36,39 +36,56 @@ class _AnimationScreenState extends State<AnimationScreen>
       curvedAnimation,
     )
       ..addListener(() {
-        setState(
-          () {},
-        );
+        setState(() {});
       })
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          animController.reverse();
+          animationController.reverse();
         } else if (status == AnimationStatus.dismissed) {
-          animController.forward();
+          animationController.forward();
         }
       });
 
-    animController.forward();
+    animationController.forward();
+
     super.initState();
   }
 
   @override
   void dispose() {
-    animController.dispose();
+    animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Transform.rotate(
-          angle: animation.value,
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(
-              30.0,
-            ),
-            child: Image.asset(
-              'assets/resocoder.png',
+        body: Center(
+          child: Transform.rotate(
+            angle: animation.value,
+            child: Container(
+              alignment: Alignment.center,
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Colors.blue,
+                    Colors.green,
+                    Colors.yellow,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(
+                  16.0,
+                ),
+              ),
+              child: const Text(
+                'I Love Flutter :-)',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 30.0,
+                ),
+              ),
             ),
           ),
         ),
