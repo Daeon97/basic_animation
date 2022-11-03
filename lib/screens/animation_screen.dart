@@ -31,16 +31,10 @@ class _AnimationScreenState extends State<AnimationScreen>
 
     animation = Tween<double>(
       begin: 0,
-      end: 2 * math.pi,
+      end: 1,
     ).animate(
       curvedAnimation,
-    )
-      ..addListener(() {
-        setState(
-          () {},
-        );
-      })
-      ..addStatusListener((status) {
+    )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           animController.reverse();
         } else if (status == AnimationStatus.dismissed) {
@@ -60,17 +54,47 @@ class _AnimationScreenState extends State<AnimationScreen>
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Transform.rotate(
-          angle: animation.value,
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(
-              30.0,
-            ),
-            child: Image.asset(
-              'assets/resocoder.png',
-            ),
-          ),
+        body: RotatingTransition(
+          angle: animation,
+          child: ResocoderImage(),
+        ),
+      );
+}
+
+class RotatingTransition extends StatelessWidget {
+  const RotatingTransition({
+    Key? key,
+    required this.angle,
+    required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+  final Animation<double> angle;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: angle,
+      child: child,
+      builder: (context, child) => Transform.rotate(
+        angle: angle.value,
+        child: child,
+      ),
+    );
+  }
+}
+
+class ResocoderImage extends StatelessWidget {
+  const ResocoderImage({super.key});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(
+          30.0,
+        ),
+        child: Image.asset(
+          'assets/resocoder.png',
         ),
       );
 }
