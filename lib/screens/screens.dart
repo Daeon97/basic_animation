@@ -1,1 +1,2 @@
-export 'animation_screen.dart';
+export 'first_screen.dart';
+export 'second_screen.dart';
