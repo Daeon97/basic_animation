@@ -24,7 +24,7 @@ class _AnimationScreenState extends State<AnimationScreen>
 
     curvedAnimation = CurvedAnimation(
       parent: animationController,
-      curve: Curves.easeInCubic,
+      curve: Curves.bounceInOut,
       reverseCurve: Curves.bounceOut,
     );
 
@@ -33,8 +33,7 @@ class _AnimationScreenState extends State<AnimationScreen>
       end: 1,
     ).animate(
       curvedAnimation,
-    )
-      ..addStatusListener((status) {
+    )..addStatusListener((status) {
         if (status == AnimationStatus.dismissed) {
           animationController.forward();
         } else if (status == AnimationStatus.completed) {
@@ -65,11 +64,30 @@ class _AnimationScreenState extends State<AnimationScreen>
             color: Colors.red,
           ),
         ),
-        builder: (context, child) => SizeTransition(
-          sizeFactor: animation,
-          child: child,
+        builder: (context, child) => RotatingTransition(
+          angle: animation,
+          child: child!,
         ),
       ),
+    );
+  }
+}
+
+class RotatingTransition extends StatelessWidget {
+  const RotatingTransition({
+    Key? key,
+    required this.angle,
+    required this.child,
+  }) : super(key: key);
+
+  final Animation<double> angle;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: angle.value,
+      child: child,
     );
   }
 }
