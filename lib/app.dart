@@ -7,7 +7,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: 'Custom Page Transitions',
-        home: const FirstScreen(),
+        home: const StaggerDemoScreen(),
         theme: ThemeData.light().copyWith(
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
             backgroundColor: Colors.deepOrange,
